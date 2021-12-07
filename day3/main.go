@@ -20,7 +20,14 @@ type kmax struct {
 	val int
 }
 
-func readRow(ch chan dt, allFields []string, column int) {
+func readRow(ch chan dt, allFields []string, column int, bitcrit string) {
+	var keepval string
+	if bitcrit == "oxy" {
+		keepval = "1"
+	} else {
+		keepval = "0"
+	}
+
 	m := make(map[string]int)
 	// m["0"] = 0
 	// m["1"] = 0
@@ -38,6 +45,10 @@ func readRow(ch chan dt, allFields []string, column int) {
 
 		if temp.val > max.val {
 			max = temp
+		} else if temp.val == max.val {
+			if temp.key == keepval {
+				max = temp
+			}
 		}
 	}
 	binaryWithMax, _ := strconv.Atoi(max.key)
@@ -115,9 +126,45 @@ func main() {
 
 	row_size := len(string(allfields[0]))
 
+	//Oxygen Generator Rating
+	sorted_rows := most_significants(row_size, allfields, "oxy")
+
+	fmt.Println(sorted_rows)
+	/*
+		Steps:
+		1. Get rows with same bit at that position
+		2. Repopulate file variable to simulate file read
+		3. Repeat until
+
+	*/
+	for i := 0; i < row_size; i++ {
+		var new_wanted_fields []string
+
+		for _, v := range sorted_rows {
+			// fmt.Println(v)
+			for _, r := range v.wantedRows {
+				new_wanted_fields = append(new_wanted_fields, allfields[r])
+				// sorted_rows = most_significants(row_size, allfields)
+			}
+			// fmt.Println(new_wanted_fields)]
+
+		}
+	}
+
+	gamma_rate := make_to_string(sorted_rows)
+	epsilon_rate := epsilon_rate_calc(gamma_rate)
+	fmt.Printf("Value: %v Type: %T Decimal: %d\n", gamma_rate, gamma_rate, binary_to_decimal(gamma_rate))
+	fmt.Printf("Value: %v Type: %T Decimal: %d\n", epsilon_rate, epsilon_rate, binary_to_decimal(epsilon_rate))
+	final_val := binary_to_decimal(gamma_rate) * binary_to_decimal(epsilon_rate)
+	fmt.Println(final_val)
+
+}
+
+func most_significants(row_size int, allfields []string, bitcrit string) []dt {
+
 	rows := make(chan dt)
 	for i := 0; i < row_size; i++ {
-		go readRow(rows, allfields, i)
+		go readRow(rows, allfields, i, bitcrit)
 		// time.Sleep(100)
 	}
 
@@ -135,16 +182,5 @@ func main() {
 		}
 	})
 
-	for _, v := range sorted_rows {
-		fmt.Println(v)
-	}
-
-	gamma_rate := make_to_string(sorted_rows)
-	epsilon_rate := epsilon_rate_calc(gamma_rate)
-	fmt.Printf("Value: %v Type: %T Decimal: %d\n", gamma_rate, gamma_rate, binary_to_decimal(gamma_rate))
-	fmt.Printf("Value: %v Type: %T Decimal: %d\n", epsilon_rate, epsilon_rate, binary_to_decimal(epsilon_rate))
-	final_val := binary_to_decimal(gamma_rate) * binary_to_decimal(epsilon_rate)
-	fmt.Println(final_val)
-
-	close(rows)
+	return sorted_rows
 }
