@@ -63,9 +63,15 @@ func main() {
 	// }
 	var bingonumbs chan int
 	var winners chan wins
-	
-	for 
 
+	for _, bingo_number := range bingo_numbs {
+		bn, _ := strconv.Atoi(string(bingo_number))
+		bingonumbs <- bn
+	}
+
+	for boardnumber, board := range boards {
+		go checkBoard(bingonumbs, winners, board[:][:], boardnumber)
+	}
 
 }
 
@@ -152,8 +158,8 @@ func checkBoard(bingonumbs chan int, winner chan wins, board [][]string, boardnu
 	rowwin := checkRows(board[:][:])
 
 	if columnwin == true || rowwin == true {
-		sum := sumUnwanted(board[:][:])
-		var win = wins{boardnumber, sum, bingo_numb}
+		sum _winning:= sumUnwanted(board[:][:]) * bingo_numb
+		var win = wins{boardnumber, sum_winning, bingo_numb}
 		winner <- win
 	}
 
