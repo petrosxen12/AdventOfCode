@@ -61,17 +61,28 @@ func main() {
 	// 	fmt.Printf("Board number: %d\nContent: %v\n", i, v)
 	// 	fmt.Println("Testing single value: ", v[0][1])
 	// }
-	var bingonumbs chan int
-	var winners chan wins
-
+	// var bingonumbs chan int
+	// var winners chan wins
+	var bingo_numbers []int
 	for _, bingo_number := range bingo_numbs {
 		bn, _ := strconv.Atoi(string(bingo_number))
-		bingonumbs <- bn
+		bingo_numbers = append(bingo_numbers, bn)
+		// bingonumbs <- bn
 	}
 
-	for boardnumber, board := range boards {
-		go checkBoard(bingonumbs, winners, board[:][:], boardnumber)
+	for bn := range bingo_numbers {
+		for boardnumber, board := range boards {
+			// checkBoard(bn, winners, board[:][:], boardnumber)
+			checkBoard(bn, board[:][:], boardnumber)
+			// time.Sleep(100)
+		}
 	}
+
+	// for i := 0; i < len(boards); i++ {
+	// 	v := <-winners
+	// 	// fmt.Println(v)
+	// 	fmt.Println(v)
+	// }
 
 }
 
@@ -150,17 +161,27 @@ func sumUnwanted(board [][]string) int {
 	return summius
 }
 
-func checkBoard(bingonumbs chan int, winner chan wins, board [][]string, boardnumber int) {
-	bingo_numb := <-bingonumbs
-
+// func checkBoard(bingo_numb int, winner chan wins, board [][]string, boardnumber int) wins {
+func checkBoard(bingo_numb int, board [][]string, boardnumber int) wins {
+	// bingo_numb := <-bingonumbs
+	fmt.Printf("BN: %d - BingoNumb: %d\n", boardnumber, bingo_numb)
 	replaceBingoNumber(board[:][:], bingo_numb)
 	columnwin := checkColumns(board[:][:])
 	rowwin := checkRows(board[:][:])
 
+	// if columnwin == true || rowwin == true {
+	// 	sum_winning := sumUnwanted(board[:][:]) * bingo_numb
+	// 	var win = wins{boardnumber, sum_winning, bingo_numb}
+	// 	winner <- win
+	// } else {
+	// 	var win = wins{-1, -1, -1}
+	// 	winner <- win
+	// }
 	if columnwin == true || rowwin == true {
-		sum _winning:= sumUnwanted(board[:][:]) * bingo_numb
+		sum_winning := sumUnwanted(board[:][:]) * bingo_numb
 		var win = wins{boardnumber, sum_winning, bingo_numb}
-		winner <- win
+		return win
 	}
-
+	var win = wins{-1, -1, -1}
+	return win
 }
