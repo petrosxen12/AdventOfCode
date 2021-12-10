@@ -77,7 +77,7 @@ func main() {
 	fmt.Println(bingo_numbers)
 
 	for _, bn := range bingo_numbers {
-		for boardnumber, _ := range boards {
+		for boardnumber := range boards {
 			// checkBoard(bn, winners, board[:][:], boardnumber)
 			// fmt.Println(boardnumber)
 			// fmt.Println(bn)
