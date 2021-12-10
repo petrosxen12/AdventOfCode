@@ -29,12 +29,12 @@ func main() {
 	//Get bingo numbers
 	for scanner.Scan() {
 		bingo_numbs = scanner.Text()
-		fmt.Println(bingo_numbs)
+		// fmt.Println(bingo_numbs)
 		break
 	}
 
 	//To read boards
-	fmt.Println("Boards")
+	// fmt.Println("Boards")
 
 	var boards = make(map[int][][]string)
 	var number_board = 1
@@ -51,9 +51,9 @@ func main() {
 			sl = append(sl, board)
 			boards[number_board] = sl
 		}
-		fmt.Println(boards[number_board])
+		// fmt.Println(boards[number_board])
 		number_board++
-		fmt.Println("End of board")
+		// fmt.Println("End of board")
 	}
 
 	//For debugging purposes
@@ -64,16 +64,29 @@ func main() {
 	// var bingonumbs chan int
 	// var winners chan wins
 	var bingo_numbers []int
-	for _, bingo_number := range bingo_numbs {
-		bn, _ := strconv.Atoi(string(bingo_number))
+	bni := strings.Split(bingo_numbs, ",")
+
+	// fmt.Printf("%T\n", bni)
+	for _, bingo_number := range bni {
+		bn, _ := strconv.Atoi(bingo_number)
 		bingo_numbers = append(bingo_numbers, bn)
+		// fmt.Println(bingo_numbers)
+
 		// bingonumbs <- bn
 	}
+	fmt.Println(bingo_numbers)
 
-	for bn := range bingo_numbers {
-		for boardnumber, board := range boards {
+	for _, bn := range bingo_numbers {
+		for boardnumber, _ := range boards {
 			// checkBoard(bn, winners, board[:][:], boardnumber)
-			checkBoard(bn, board[:][:], boardnumber)
+			// fmt.Println(boardnumber)
+			// fmt.Println(bn)
+			// fmt.Println("------")
+			win := checkBoard(bn, boards[boardnumber], boardnumber)
+			if win.sum != -1 {
+				fmt.Println(win)
+				return
+			}
 			// time.Sleep(100)
 		}
 	}
@@ -141,10 +154,10 @@ func checkColumns(column [][]string) bool {
 //Board passed in as a slice so edited in place :)
 func replaceBingoNumber(board [][]string, bingonumb int) {
 	bingonumbstr := strconv.Itoa(bingonumb)
-	for _, row := range board {
-		for _, val := range row {
-			if val == bingonumbstr {
-				val = "-1"
+	for i := 0; i < len(board); i++ {
+		for j := 0; j < len(board); j++ {
+			if board[i][j] == bingonumbstr {
+				board[i][j] = "-1"
 			}
 		}
 	}
@@ -155,7 +168,9 @@ func sumUnwanted(board [][]string) int {
 	for _, row := range board {
 		for _, val := range row {
 			valint, _ := strconv.Atoi(val)
-			summius += valint
+			if valint != -1 {
+				summius += valint
+			}
 		}
 	}
 	return summius
@@ -164,8 +179,9 @@ func sumUnwanted(board [][]string) int {
 // func checkBoard(bingo_numb int, winner chan wins, board [][]string, boardnumber int) wins {
 func checkBoard(bingo_numb int, board [][]string, boardnumber int) wins {
 	// bingo_numb := <-bingonumbs
-	fmt.Printf("BN: %d - BingoNumb: %d\n", boardnumber, bingo_numb)
+	// fmt.Printf("BN: %d - BingoNumb: %d\n", boardnumber, bingo_numb)
 	replaceBingoNumber(board[:][:], bingo_numb)
+	// fmt.Println(board)
 	columnwin := checkColumns(board[:][:])
 	rowwin := checkRows(board[:][:])
 
