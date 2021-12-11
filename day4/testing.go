@@ -8,11 +8,19 @@ import (
 func replaceBingoNumber(board [][]string, bingonumb int) {
 	bingonumbstr := strconv.Itoa(bingonumb)
 
-	for i := 0; i < len(board); i++ {
-		for j := 0; j < len(board); j++ {
-			if board[i][j] == bingonumbstr {
+	// for i := 0; i < len(board); i++ {
+	// 	for j := 0; j < len(board); j++ {
+	// 		if board[i][j] == bingonumbstr {
+	// 			fmt.Println("Found")
+	// 			board[i][j] = "-1"
+	// 		}
+	// 	}
+	// }
+	for _, row := range board {
+		for _, val := range row {
+			if val == bingonumbstr {
 				fmt.Println("Found")
-				board[i][j] = "-1"
+				val = "-1"
 			}
 		}
 	}
