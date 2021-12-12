@@ -76,6 +76,13 @@ func main() {
 	}
 	fmt.Println(bingo_numbers)
 
+	var wb map[int]bool
+	var winner wins
+
+	for k := range boards {
+		wb[k] = false
+	}
+
 	for _, bn := range bingo_numbers {
 		for boardnumber := range boards {
 			// checkBoard(bn, winners, board[:][:], boardnumber)
@@ -84,19 +91,33 @@ func main() {
 			// fmt.Println("------")
 			win := checkBoard(bn, boards[boardnumber], boardnumber)
 			if win.sum != -1 {
-				fmt.Println(win)
-				return
+				trues := count_trues(wb)
+				if trues == len(boards)-1 {
+					winner = win
+					break
+				} else {
+					wb[boardnumber] = true
+				}
 			}
-			// time.Sleep(100)
 		}
 	}
-
+	fmt.Println(winner)
 	// for i := 0; i < len(boards); i++ {
 	// 	v := <-winners
 	// 	// fmt.Println(v)
 	// 	fmt.Println(v)
 	// }
 
+}
+
+func count_trues(winb map[int]bool) int {
+	counter := 0
+	for _, v := range winb {
+		if v == true {
+			counter++
+		}
+	}
+	return counter
 }
 
 type wins struct {
