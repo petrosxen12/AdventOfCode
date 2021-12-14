@@ -73,3 +73,7 @@ func get_horizontal_vertical_lines(lines []line) []line {
 
 	return hv_lines
 }
+
+func all_covered_points_by_line(l line) []line {
+	// TODO: Implement function
+}
