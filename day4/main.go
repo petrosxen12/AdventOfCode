@@ -74,39 +74,27 @@ func main() {
 
 		// bingonumbs <- bn
 	}
-	fmt.Println(bingo_numbers)
 
-	var wb map[int]bool
-	var winner wins
-
-	for k := range boards {
-		wb[k] = false
-	}
+	wb := make(map[int]bool)
 
 	for _, bn := range bingo_numbers {
-		for boardnumber := range boards {
-			// checkBoard(bn, winners, board[:][:], boardnumber)
+		// for boardnumber := range boards {
+		for boardnumber := 1; boardnumber < len(boards)+1; boardnumber++ {
 			// fmt.Println(boardnumber)
-			// fmt.Println(bn)
-			// fmt.Println("------")
 			win := checkBoard(bn, boards[boardnumber], boardnumber)
 			if win.sum != -1 {
-				trues := count_trues(wb)
-				if trues == len(boards)-1 {
-					winner = win
-					break
+				// wb[boardnumber] = true
+				// fmt.Println(win)
+				if count_trues(wb) == len(boards)-1 && wb[boardnumber] == false {
+					fmt.Println("This is the last one to win!")
+					fmt.Println(win)
+					return
 				} else {
 					wb[boardnumber] = true
 				}
 			}
 		}
 	}
-	fmt.Println(winner)
-	// for i := 0; i < len(boards); i++ {
-	// 	v := <-winners
-	// 	// fmt.Println(v)
-	// 	fmt.Println(v)
-	// }
 
 }
 
