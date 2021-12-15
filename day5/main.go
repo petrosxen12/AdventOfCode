@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -58,9 +59,20 @@ func main() {
 	}
 
 	fmt.Println(coordinates)
-	fmt.Println("=====================")
+	fmt.Println("=========Horizontal & Vertical Lines============")
 	hv_coords := get_horizontal_vertical_lines(coordinates)
-	fmt.Println(hv_coords)
+	// fmt.Println(hv_coords)
+
+	//For each coordinate show all current points
+	for _, v := range hv_coords {
+		fmt.Println("For point: ", v)
+		ls := all_covered_points_by_line(v)
+		fmt.Println(ls)
+	}
+}
+
+func find_overlapping_points() {
+
 }
 
 func get_horizontal_vertical_lines(lines []line) []line {
@@ -75,5 +87,28 @@ func get_horizontal_vertical_lines(lines []line) []line {
 }
 
 func all_covered_points_by_line(l line) []line {
-	// TODO: Implement function
+	var covered_points []line
+
+	if l.x1 == l.x2 {
+		biggest_val := math.Max(float64(l.y2), float64(l.y1))
+		minimum_val := math.Min(float64(l.y2), float64(l.y1))
+
+		for i := minimum_val; i <= biggest_val; i++ {
+			v := int(i)
+			point := line{l.x1, v, l.x2, v}
+			covered_points = append(covered_points, point)
+		}
+	}
+
+	if l.y1 == l.y2 {
+		biggest_val := math.Max(float64(l.x2), float64(l.x1))
+		minimum_val := math.Min(float64(l.x2), float64(l.x1))
+
+		for i := minimum_val; i <= biggest_val; i++ {
+			v := int(i)
+			point := line{v, l.y1, v, l.y2}
+			covered_points = append(covered_points, point)
+		}
+	}
+	return covered_points
 }
