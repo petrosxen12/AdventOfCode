@@ -61,18 +61,29 @@ func main() {
 	fmt.Println(coordinates)
 	fmt.Println("=========Horizontal & Vertical Lines============")
 	hv_coords := get_horizontal_vertical_lines(coordinates)
-	// fmt.Println(hv_coords)
 
 	//For each coordinate show all current points
+	lshold := make(map[line][]line)
+
 	for _, v := range hv_coords {
 		fmt.Println("For point: ", v)
 		ls := all_covered_points_by_line(v)
 		fmt.Println(ls)
+		lshold[v] = ls
 	}
+
 }
 
-func find_overlapping_points() {
+func find_overlapping_points(l []line) map[line]int {
+	ln := make(map[line]int)
 
+	for _, v := range l {
+		if ln[v] == 0 {
+			ln[v]++
+		}
+	}
+
+	return ln
 }
 
 func get_horizontal_vertical_lines(lines []line) []line {
