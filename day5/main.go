@@ -71,15 +71,25 @@ func main() {
 		fmt.Println(ls)
 		lshold[v] = ls
 	}
+	overlaps := 0
 
+	overlapping := find_overlapping_points(lshold)
+	for k, v := range overlapping {
+		if v >= 2 {
+			fmt.Println(k)
+			overlaps++
+		}
+	}
+
+	fmt.Println(overlaps)
 }
 
-func find_overlapping_points(l []line) map[line]int {
+func find_overlapping_points(l map[line][]line) map[line]int {
 	ln := make(map[line]int)
 
 	for _, v := range l {
-		if ln[v] == 0 {
-			ln[v]++
+		for _, lni := range v {
+			ln[lni]++
 		}
 	}
 
