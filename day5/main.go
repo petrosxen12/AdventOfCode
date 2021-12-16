@@ -47,7 +47,7 @@ func main() {
 		res := re.FindAllStringSubmatch(v, -1)
 		// fmt.Println(res)
 		for _, number := range res {
-			fmt.Printf("x1: %s y1: %s - x2: %s y2: %s\n", number[1], number[2], number[3], number[4])
+			// fmt.Printf("x1: %s y1: %s - x2: %s y2: %s\n", number[1], number[2], number[3], number[4])
 
 			x1, _ := strconv.Atoi(number[1])
 			y1, _ := strconv.Atoi(number[2])
@@ -58,7 +58,7 @@ func main() {
 		}
 	}
 
-	fmt.Println(coordinates)
+	// fmt.Println(coordinates)
 	fmt.Println("=========Horizontal & Vertical Lines============")
 	hv_coords := get_horizontal_vertical_lines(coordinates)
 
@@ -74,9 +74,9 @@ func main() {
 	overlaps := 0
 
 	overlapping := find_overlapping_points(lshold)
-	for k, v := range overlapping {
+	for _, v := range overlapping {
 		if v >= 2 {
-			fmt.Println(k)
+			// fmt.Println(k)
 			overlaps++
 		}
 	}
@@ -99,7 +99,7 @@ func find_overlapping_points(l map[line][]line) map[line]int {
 func get_horizontal_vertical_lines(lines []line) []line {
 	var hv_lines []line
 	for _, l := range lines {
-		if l.x1 == l.x2 || l.y1 == l.y2 {
+		if l.x1 == l.x2 || l.y1 == l.y2 || math.Abs(float64(l.x1)-float64(l.x2)) == math.Abs(float64(l.y1)-float64(l.y2)) {
 			hv_lines = append(hv_lines, l)
 		}
 	}
@@ -110,6 +110,7 @@ func get_horizontal_vertical_lines(lines []line) []line {
 func all_covered_points_by_line(l line) []line {
 	var covered_points []line
 
+	// Vertical Lines
 	if l.x1 == l.x2 {
 		biggest_val := math.Max(float64(l.y2), float64(l.y1))
 		minimum_val := math.Min(float64(l.y2), float64(l.y1))
@@ -121,6 +122,7 @@ func all_covered_points_by_line(l line) []line {
 		}
 	}
 
+	// Horizontal Lines
 	if l.y1 == l.y2 {
 		biggest_val := math.Max(float64(l.x2), float64(l.x1))
 		minimum_val := math.Min(float64(l.x2), float64(l.x1))
@@ -131,5 +133,35 @@ func all_covered_points_by_line(l line) []line {
 			covered_points = append(covered_points, point)
 		}
 	}
+
+	// Diagonal Lines
+	if math.Abs(float64(l.x1)-float64(l.x2)) == math.Abs(float64(l.y1)-float64(l.y2)) {
+
+		biggest_val_y := math.Max(float64(l.y2), float64(l.y1))
+		x_point := 0
+
+		if int(biggest_val_y) == l.y1 {
+			x_point = l.x1
+		} else {
+			x_point = l.x2
+		}
+		// minimum_val_x := math.Min(float64(l.x2), float64(l.x1))
+
+		gradient := (l.y2 - l.y1) / (l.x2 - l.x1)
+
+		point := line{}
+
+		for i := 0; i <= int(math.Abs(float64(l.x1)-float64(l.x2))); i++ {
+			v := int(i)
+			if gradient > 0 {
+				point = line{x_point - v, int(biggest_val_y) - v, x_point - v, int(biggest_val_y) - v}
+			}
+			if gradient < 0 {
+				point = line{x_point + v, int(biggest_val_y) - v, x_point + v, int(biggest_val_y) - v}
+			}
+			covered_points = append(covered_points, point)
+		}
+	}
+
 	return covered_points
 }
