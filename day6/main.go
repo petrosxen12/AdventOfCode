@@ -43,7 +43,6 @@ func main() {
 
 	fmt.Println(fish_life)
 
-	// days := 3
 	intdays := *days
 	var fish_days []int
 
@@ -54,11 +53,19 @@ func main() {
 
 	var fishies_spawn []int
 
-	for i := 1; i < intdays+1; i++ {
+	compressor := make(map[int]int)
 
+	for _, f := range fish_days {
+		compressor[f]++
+	}
+	fmt.Println(compressor)
+
+	// Debugging return
+	// return
+
+	for i := 1; i < intdays+1; i++ {
 		for j := 0; j < len(fish_days); j++ {
 			fish_days[j]--
-			// fmt.Println(fish_days[j])
 			if fish_days[j] == -1 {
 				fish_days[j] = 6
 				fishies_spawn = append(fishies_spawn, 8)
