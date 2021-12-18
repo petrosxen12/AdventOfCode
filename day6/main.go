@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -51,7 +52,8 @@ func main() {
 		fish_days = append(fish_days, v)
 	}
 
-	var fishies_spawn []int
+	// var fishies_spawn []int
+	sort.Ints(fish_days)
 
 	compressor := make(map[int]int)
 
@@ -64,16 +66,23 @@ func main() {
 	// return
 
 	for i := 1; i < intdays+1; i++ {
-		for j := 0; j < len(fish_days); j++ {
-			fish_days[j]--
-			if fish_days[j] == -1 {
-				fish_days[j] = 6
-				fishies_spawn = append(fishies_spawn, 8)
+		appender := false
+
+		for k, v := range compressor {
+			if v > 0 && k >= 0 && !(v < 0) {
+				compressor[k] -= 1
+				compressor[k-1] += 1
+			} else {
+				appender = true
 			}
 		}
-		fish_days = append(fish_days, fishies_spawn...)
-		fishies_spawn = nil
-		// fmt.Printf("Day %d: %v\n", i, fish_days)
+		// fish_days = append(fish_days, fishies_spawn...)
+		// fishies_spawn = nil
+		if appender {
+			compressor[6]++
+			compressor[8]++
+		}
+		fmt.Printf("Day %d: %v\n", i, compressor)
 	}
 	fmt.Println(len(fish_days))
 }
