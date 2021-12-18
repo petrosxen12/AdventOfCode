@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"strconv"
@@ -35,12 +36,15 @@ func main() {
 	/*
 		Each day, a 0 becomes a 6 and adds a new 8 to the end of the list, while each other number decreases by 1 if it was present at the start of the day.
 	*/
+	days := flag.Int("days", 42, "reproduction days of fishies")
+	flag.Parse()
+
 	fish_life := strings.Split(fish_timers, ",")
 
 	fmt.Println(fish_life)
 
-	days := 3
-
+	// days := 3
+	intdays := *days
 	var fish_days []int
 
 	for _, fl := range fish_life {
@@ -48,22 +52,21 @@ func main() {
 		fish_days = append(fish_days, v)
 	}
 
-	for i := 1; i < days+1; i++ {
-		for j := 0; j < len(fish_days); j++ {
-			appendius := false
-			if fish_days[j] == 0 {
-				appendius = true
-				fish_days[j] = 6
-				fish_days = append(fish_days, 8)
-			}
-			if fish_days[j] == 8 && appendius == true {
-				continue
-			} else {
-				fish_days[j]--
-			}
+	var fishies_spawn []int
 
+	for i := 1; i < intdays+1; i++ {
+
+		for j := 0; j < len(fish_days); j++ {
+			fish_days[j]--
+			// fmt.Println(fish_days[j])
+			if fish_days[j] == -1 {
+				fish_days[j] = 6
+				fishies_spawn = append(fishies_spawn, 8)
+			}
 		}
-		fmt.Printf("Day %d: %v\n", i, fish_days)
+		fish_days = append(fish_days, fishies_spawn...)
+		fishies_spawn = nil
+		// fmt.Printf("Day %d: %v\n", i, fish_days)
 	}
 	fmt.Println(len(fish_days))
 }
