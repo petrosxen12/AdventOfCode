@@ -1,3 +1,41 @@
+def part_two_match_outcome(opponent_choice, match_outcome):
+    """
+     1. X means you need to lose.
+     2. Y means you need to end the round in a draw.
+     3. Z means you need to win. 
+    """
+
+    if match_outcome == "X":
+        if opponent_choice == "A":
+            return choice_points("Z")
+
+        if opponent_choice == "C":
+            return choice_points("Y")
+
+        if opponent_choice == "B":
+            return choice_points("X")
+
+    if match_outcome == "Y":
+        if opponent_choice == "A":
+            return choice_points("X")
+
+        if opponent_choice == "C":
+            return choice_points("Z")
+
+        if opponent_choice == "B":
+            return choice_points("Y")
+
+    if match_outcome == "Z":
+        if opponent_choice == "C":
+            return choice_points("X")
+
+        if opponent_choice == "B":
+            return choice_points("Z")
+
+        if opponent_choice == "A":
+            return choice_points("Y")
+
+
 def round_outcome(my_choice, opponent_choice):
     """
     1. Rock defeats Scissors
@@ -50,6 +88,14 @@ def win_lose_points(outcome):
     if outcome == "d":
         return 3
 
+def win_lose_points_part_two(outcome):
+    if outcome == "X":
+        return 0
+    if outcome == "Z":
+        return 6
+    if outcome == "Y":
+        return 3
+
 if __name__ == "__main__":
 
     total_points = 0
@@ -61,8 +107,14 @@ if __name__ == "__main__":
 
             opponent_choice = opponent_mychoice[0]
             my_choice = opponent_mychoice[1]
+            
+            outcome = opponent_mychoice[1]
        
-            round_score = win_lose_points(round_outcome(my_choice=my_choice, opponent_choice=opponent_choice)) + choice_points(choice=my_choice)
+            # round_score = win_lose_points(round_outcome(my_choice=my_choice, 
+            # opponent_choice=opponent_choice)) + choice_points(choice=my_choice)
+
+            round_score = part_two_match_outcome(opponent_choice, outcome) + win_lose_points_part_two(outcome)
+
 
             total_points+=int(round_score)
 
