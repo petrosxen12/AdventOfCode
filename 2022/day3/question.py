@@ -1,3 +1,9 @@
+def find_common_letter_three_elf_group(groups):
+    elf_group_common_letter = list(set(groups[0]) & set(groups[1]) & set(groups[2]))
+    # print(elf_group_common_letter)
+    return elf_group_common_letter[0]
+
+
 def split_compartments(rucksack_contents):
     contents_length = len(rucksack_contents)
     
@@ -32,13 +38,19 @@ def letter_priority(letter):
 if __name__ == "__main__":
     total_priorities = 0
 
+    three_elf_group = []
+
     with open("input.txt") as f:
-        for rucksack in f.readlines():
-            first_comp, second_comp = split_compartments(rucksack)
-            common_letter = find_common_letter(first_comp, second_comp)
-    
-            ltr_prt = letter_priority(common_letter)
+        for i, rucksack in enumerate(f.readlines()):
+            # first_comp, second_comp = split_compartments(rucksack)
+            # common_letter = find_common_letter(first_comp, second_comp)
+            three_elf_group.append(rucksack.strip())
 
-            total_priorities+= ltr_prt
+            if len(three_elf_group) == 3:
+                common_letter = find_common_letter_three_elf_group(three_elf_group)
+                ltr_prt = letter_priority(common_letter)
 
+                total_priorities+= ltr_prt
+                three_elf_group.clear()
+                
     print(total_priorities)
