@@ -46,15 +46,25 @@ if __name__ == "__main__":
 
     # print(stack_of_crates)
     read_flag = 0
+    counter_flag = 0
 
     with open("input.txt") as f:
-        for line in f.readlines():
-            if read_flag == 1:
-                print(line)
-                movements = parse_expression(line.strip())
-                stack_of_crates = move_crates(soc=stack_of_crates, number_of_crates=movements[0], origin_stack_id=movements[1],destination_stack_id= movements[2])
+        all_lines = f.readlines()
+        length_lines = len(all_lines)
 
-            if line == '\n':
-                read_flag = 1        
+        for index,line in enumerate(all_lines[10:]):
+            # if read_flag == 0:
+            #     counter_flag+=1
+            # if read_flag == 1:
+            print((index/length_lines)*100)
+            movements = parse_expression(line.strip())
+            stack_of_crates = move_crates(soc=stack_of_crates, number_of_crates=movements[0], origin_stack_id=movements[1],destination_stack_id= movements[2])
+
+            print(line)
+            # print(stack_of_crates)
+
+            # if line == '\n':
+            #     read_flag = 1        
     
-    print(stack_of_crates)
+    for x in stack_of_crates.items():
+        print(f"{x[0]}, {x[1]}")
