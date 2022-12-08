@@ -20,7 +20,8 @@ def move_crates(soc, number_of_crates, origin_stack_id, destination_stack_id):
     print(f"Origin cut: {origin_stack_cut}")
 
     # reversal happens in place to simulate movement of one crate at a time
-    origin_stack_cut.reverse()
+    # Remove reversal for part two
+    # origin_stack_cut.reverse()
 
     # for crate in origin_stack_cut:
     #     soc[destination_stack_id].append(crate)
