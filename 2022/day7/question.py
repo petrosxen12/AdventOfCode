@@ -7,7 +7,7 @@ def command(cmd_input: str):
 
     return None
 
-def file(cmd_input: str) -> Union[int, int | None] :
+def file(cmd_input: str) -> Union[Union[int, int], None] :
     # print(cmd_input[0:3])
     if cmd_input[0] != "$" and cmd_input[0:3] != 'dir':
         file_details = cmd_input.split(sep=" ")
@@ -19,7 +19,7 @@ def file(cmd_input: str) -> Union[int, int | None] :
 
     return None
 
-def directory(cmd_input: str) -> Union[str | None]:
+def directory(cmd_input: str) -> Union[str , None]:
     if cmd_input[0:3] == 'dir':
         return cmd_input[3:].strip()
 
@@ -41,10 +41,11 @@ def get_files_of_directory(directory_to_cd_to: str, ls_command: str):
     if cmd and ls:
         if cmd_size== 1:
             return None
-        if cmd_size == 2 and cmd.split()[1] is not "..":
+        if cmd_size == 2 and cmd.split()[1] != "..":
             directory = cmd.split()[1]
 
             if ls_cmd_size == 1:
+                pass
 
 
 @dataclass
